@@ -18,7 +18,7 @@ BlinkyDancer.prototype.oldStep = Dancer.prototype.step;
 BlinkyDancer.prototype.step = function(){
   // call the old version of step at the beginning of any call to this new version of step
   // debugger;
-  console.log("this", this);
+  // console.log("this", this);
   this.oldStep();
 
   /* toggle() is a jQuery method to show/hide the <span> tag.
