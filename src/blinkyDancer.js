@@ -1,5 +1,6 @@
 var BlinkyDancer = function(top, left, timeBetweenSteps){
-  Dancer.apply(this, arguments);
+  var tag = '<span class="dancer"></span>';
+  Dancer.call(this, top, left, timeBetweenSteps, tag);
 };
 
 BlinkyDancer.prototype = new Dancer();
