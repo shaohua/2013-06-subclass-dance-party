@@ -1,5 +1,7 @@
 var WhiteDancer = function(top, left, timeBetweenSteps){
-  Dancer.apply(this, arguments);
+  var typeOfDancer = 'white_dancer';
+  Dancer.call(this, top, left, timeBetweenSteps, typeOfDancer);
+  console.log('top', top, 'left', left);
 };
 
 WhiteDancer.prototype = new Dancer();
