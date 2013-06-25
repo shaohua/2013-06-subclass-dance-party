@@ -12,6 +12,8 @@ WhiteDancer.prototype.step = function(){
   this.$node.toggle();
 };
 
+
+
 var BlueDancer = function(top, left, timeBetweenSteps){
   var tag = '<span class="blue_dancer"></span>';
   Dancer.call(this, top, left, timeBetweenSteps, tag);
@@ -25,6 +27,8 @@ BlueDancer.prototype.step = function(){
   this.oldStep();
   this.$node.toggle();
 };
+
+
 
 var ImageDancer = function(top, left, timeBetweenSteps){
   var tag = '<img class="image_dancer" \
