@@ -117,6 +117,23 @@
           }
         });
 
+        $('body').on('mouseover', '.dancer', function (event) {
+          console.log('mouseover!');
+
+          window.distances = [];
+          console.log(window.distances);
+          for (var i = 0; i < window.dancers.length; i++) {
+            distances.push(getDistance($(this), window.dancers[i].$node));
+          }
+          var randomNumber = Math.floor(Math.random()*4)
+          for (var j = 0; j < distances.length; j++) {
+            if (distances[j] < 200) {
+              changeColor(window.dancers[j].$node, randomNumber);
+              moveCloser($(this), window.dancers[j].$node);
+            }
+          }
+        });
+
       });
     </script>
 
