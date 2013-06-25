@@ -22,6 +22,13 @@
 
     <script>
       $(document).ready(function(){
+        
+        $(document).mousemove(function(e){
+          window.mouseXPos = e.pageX;
+          window.mouseYPos = e.pageY;
+        });
+
+
         window.dancers = [];
 
         $('.add100').on('click', function(event){
@@ -40,6 +47,7 @@
             );
 
             window.dancers.push(dancer);
+            console.log(window.mouseXPos);
             // console.log('dancer: ', dancer, 'dancer.node: ', dancer.$node);
             $('body').append(dancer.$node);
           }
@@ -47,18 +55,6 @@
         });
 
         $(".addDancerButton").on("click", function(event){
-          /* This function sets up the click handlers for the create-dancer
-           * buttons on index.html. You should not need to alter it.
-           * As long as the "data-dancer-maker-function-name" attribute of a
-           * class="addDancerButton" DOM node matches one of the names of the
-           * maker functions available in the global scope, clicking that node
-           * will call the function to make the dancer. */
-
-          /* dancerMakerFunctionName is a string which must match
-           * one of the dancer maker functions available in global scope.
-           * A new object of the given type will be created and added
-           * to the stage.
-           */
           var dancerMakerFunctionName = $(this).data("dancer-maker-function-name");
 
           // get the maker function for the kind of dancer we're supposed to make
@@ -90,6 +86,15 @@
               o_y = otherNode.position().left;
           return Math.sqrt(Math.pow((o_x - c_x), 2) + Math.pow((o_y - c_y), 2));
         };
+
+        var getMouseDistance = function(otherNode){
+          var c_x = mouseXPos,
+              c_y = mouseYPos;
+          var o_x = otherNode.position().top,
+              o_y = otherNode.position().left;
+          return Math.sqrt(Math.pow((o_x - c_x), 2) + Math.pow((o_y - c_y), 2));
+        };
+
         var changeColor = function(node, randomNumber){
           var obj = {0: 'close', 1: 'close2', 2: 'close3', 3: 'close4'};
           $(node).addClass(obj[randomNumber]);
@@ -99,6 +104,12 @@
         var moveCloser = function(clickedNode, otherNode){
           var current_top = clickedNode.position().top,
               current_left = clickedNode.position().left;
+          otherNode.css( {top:current_top, left:current_left} );
+        };
+
+        var moveToMouse = function(otherNode){
+          var current_top = window.mouseXPos,
+              current_left = window.mouseYPos;
           otherNode.css( {top:current_top, left:current_left} );
         };
 
@@ -117,19 +128,36 @@
           }
         });
 
-        $('body').on('mouseover', '.dancer', function (event) {
-          console.log('mouseover!');
+        // $('body').on('mouseover', '.dancer', function (event) {
+        //   console.log('mouseover!');
+
+        //   window.distances = [];
+        //   console.log(window.distances);
+        //   for (var i = 0; i < window.dancers.length; i++) {
+        //     distances.push(getDistance($(this), window.dancers[i].$node));
+        //   }
+        //   var randomNumber = Math.floor(Math.random()*4)
+        //   for (var j = 0; j < distances.length; j++) {
+        //     if (distances[j] < 200) {
+        //       changeColor(window.dancers[j].$node, randomNumber);
+        //       moveCloser($(this), window.dancers[j].$node);
+        //     }
+        //   }
+        // });
+
+        $('body').on('mouseover', function (event) {
+          console.log('mouseover - x: ', window.mouseXPos, event.pageX, 'y: ', window.mouseYPos, event.pageY);
 
           window.distances = [];
           console.log(window.distances);
           for (var i = 0; i < window.dancers.length; i++) {
-            distances.push(getDistance($(this), window.dancers[i].$node));
+            distances.push(getMouseDistance(window.dancers[i].$node));
           }
           var randomNumber = Math.floor(Math.random()*4)
           for (var j = 0; j < distances.length; j++) {
             if (distances[j] < 200) {
               changeColor(window.dancers[j].$node, randomNumber);
-              moveCloser($(this), window.dancers[j].$node);
+              moveToMouse(window.dancers[j].$node);
             }
           }
         });
