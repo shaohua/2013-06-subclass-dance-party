@@ -13,6 +13,7 @@
     <div class="topbar">
       <span class="title">object dance party</span>
       <a href="#" class="addDancerButton" data-dancer-maker-function-name="BlinkyDancer">add a dancer</a>
+      <a href="#" class="add100" data-dancer-maker-function-name="BlinkyDancer">add 100 dancers</a>
       <a href="#" class="addDancerButton" data-dancer-maker-function-name="WhiteDancer">white dancer</a>
       <a href="#" class="addDancerButton" data-dancer-maker-function-name="BlueDancer">blue dancer</a>
       <a href="#" class="addDancerButton" data-dancer-maker-function-name="ImageDancer">add Marcus</a>
@@ -22,6 +23,28 @@
     <script>
       $(document).ready(function(){
         window.dancers = [];
+
+        $('.add100').on('click', function(event){
+          console.log('clicked');
+          var dancerMakerFunctionName = $(this).data("dancer-maker-function-name");
+
+          // get the maker function for the kind of dancer we're supposed to make
+          var dancerMakerFunction = window[dancerMakerFunctionName];
+
+          for(var i = 0; i < 100; i++){
+            // make a dancer with a random position
+            var dancer = new dancerMakerFunction(
+              $("body").height() * Math.random(),
+              $("body").width() * Math.random(),
+              Math.random() * 1000
+            );
+
+            window.dancers.push(dancer);
+            // console.log('dancer: ', dancer, 'dancer.node: ', dancer.$node);
+            $('body').append(dancer.$node);
+          }
+
+        });
 
         $(".addDancerButton").on("click", function(event){
           /* This function sets up the click handlers for the create-dancer
@@ -63,8 +86,8 @@
         var getDistance = function(clickedNode, otherNode){
           var c_x = clickedNode.position().top,
               c_y = clickedNode.position().left;
-          var o_x = otherNode.top,
-              o_y = otherNode.left;
+          var o_x = otherNode.position().top,
+              o_y = otherNode.position().left;
           return Math.sqrt(Math.pow((o_x - c_x), 2) + Math.pow((o_y - c_y), 2));
         };
         var changeColor = function(node, randomNumber){
@@ -81,8 +104,9 @@
 
         $('body').on('click', '.dancer', function (event) {
           window.distances = [];
+          console.log(window.distances);
           for (var i = 0; i < window.dancers.length; i++) {
-            distances.push(getDistance($(this), window.dancers[i]));
+            distances.push(getDistance($(this), window.dancers[i].$node));
           }
           var randomNumber = Math.floor(Math.random()*4)
           for (var j = 0; j < distances.length; j++) {
