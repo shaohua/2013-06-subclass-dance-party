@@ -38,7 +38,7 @@
           // get the maker function for the kind of dancer we're supposed to make
           var dancerMakerFunction = window[dancerMakerFunctionName];
 
-          for(var i = 0; i < 100; i++){
+          for(var i = 0; i < 75; i++){
             // make a dancer with a random position
             var dancer = new dancerMakerFunction(
               $("body").height() * Math.random(),
@@ -79,17 +79,17 @@
           }
         });
 
-        var getDistance = function(clickedNode, otherNode){
-          var c_x = clickedNode.position().top,
-              c_y = clickedNode.position().left;
-          var o_x = otherNode.position().top,
-              o_y = otherNode.position().left;
-          return Math.sqrt(Math.pow((o_x - c_x), 2) + Math.pow((o_y - c_y), 2));
-        };
+        // var getDistance = function(clickedNode, otherNode){
+        //   var c_x = clickedNode.position().top,
+        //       c_y = clickedNode.position().left;
+        //   var o_x = otherNode.position().top,
+        //       o_y = otherNode.position().left;
+        //   return Math.sqrt(Math.pow((o_x - c_x), 2) + Math.pow((o_y - c_y), 2));
+        // };
 
         var getMouseDistance = function(otherNode){
-          var c_x = mouseXPos,
-              c_y = mouseYPos;
+          var c_y = mouseXPos,
+              c_x = mouseYPos;
           var o_x = otherNode.position().top,
               o_y = otherNode.position().left;
           return Math.sqrt(Math.pow((o_x - c_x), 2) + Math.pow((o_y - c_y), 2));
@@ -97,48 +97,43 @@
 
         var changeColor = function(node, randomNumber){
           var obj = {0: 'close', 1: 'close2', 2: 'close3', 3: 'close4'};
+          $(node).removeClass();
           $(node).addClass(obj[randomNumber]);
           console.log('adding class "close"');
         };
 
-        var moveCloser = function(clickedNode, otherNode){
-          var current_top = clickedNode.position().top,
-              current_left = clickedNode.position().left;
-          otherNode.css( {top:current_top, left:current_left} );
-        };
+        // var moveCloser = function(clickedNode, otherNode){
+        //   var current_top = clickedNode.position().top,
+        //       current_left = clickedNode.position().left;
+        //   otherNode.css( {top:current_top, left:current_left} );
+        // };
 
         var moveToMouse = function(otherNode){
-          var current_top = window.mouseXPos,
-              current_left = window.mouseYPos;
-          otherNode.css( {top:current_top, left:current_left} );
+          var current_top = window.mouseYPos,
+              current_left = window.mouseXPos;
+          var random = Math.floor(Math.random()*100);
+          var random2 = Math.floor(Math.random()*100);
+          otherNode.css( {top:current_top + random, left:current_left - random2} );
+          otherNode.position().top = current_top;
+          otherNode.position().left = current_left;
+        };
+        var repel = function(otherNode){
+          var random = Math.floor(Math.random()*1000);
+          var random2 = Math.floor(Math.random()*2000);
+          otherNode.css( {top:random, left:random2} );
+          otherNode.position().top = random;
+          otherNode.position().left = random2;
         };
 
-        $('body').on('click', '.dancer', function (event) {
-          window.distances = [];
-          console.log(window.distances);
-          for (var i = 0; i < window.dancers.length; i++) {
-            distances.push(getDistance($(this), window.dancers[i].$node));
-          }
-          var randomNumber = Math.floor(Math.random()*4)
-          for (var j = 0; j < distances.length; j++) {
-            if (distances[j] < 200) {
-              changeColor(window.dancers[j].$node, randomNumber);
-              moveCloser($(this), window.dancers[j].$node);
-            }
-          }
-        });
-
-        // $('body').on('mouseover', '.dancer', function (event) {
-        //   console.log('mouseover!');
-
+        // $('body').on('click', '.dancer', function (event) {
         //   window.distances = [];
         //   console.log(window.distances);
         //   for (var i = 0; i < window.dancers.length; i++) {
-        //     distances.push(getDistance($(this), window.dancers[i].$node));
+        //     distances.push(getMouseDistance($(this), window.dancers[i].$node));
         //   }
         //   var randomNumber = Math.floor(Math.random()*4)
         //   for (var j = 0; j < distances.length; j++) {
-        //     if (distances[j] < 200) {
+        //     if (distances[j] < 1000) {
         //       changeColor(window.dancers[j].$node, randomNumber);
         //       moveCloser($(this), window.dancers[j].$node);
         //     }
@@ -146,22 +141,34 @@
         // });
 
         $('body').on('mouseover', function (event) {
-          console.log('mouseover - x: ', window.mouseXPos, event.pageX, 'y: ', window.mouseYPos, event.pageY);
-
-          window.distances = [];
           console.log(window.distances);
+          window.distances = [];
           for (var i = 0; i < window.dancers.length; i++) {
-            distances.push(getMouseDistance(window.dancers[i].$node));
+            window.distances.push(getMouseDistance(window.dancers[i].$node));
           }
           var randomNumber = Math.floor(Math.random()*4)
           for (var j = 0; j < distances.length; j++) {
-            if (distances[j] < 200) {
+            if (distances[j] < 1000) {
               changeColor(window.dancers[j].$node, randomNumber);
               moveToMouse(window.dancers[j].$node);
             }
           }
         });
 
+        $('body').on('click', function (event) {
+          console.log(window.distances);
+          window.distances = [];
+          for (var i = 0; i < window.dancers.length; i++) {
+            window.distances.push(getMouseDistance(window.dancers[i].$node));
+          }
+          var randomNumber = Math.floor(Math.random()*4)
+          for (var j = 0; j < distances.length; j++) {
+            if (distances[j] < 1000) {
+              changeColor(window.dancers[j].$node, randomNumber);
+              repel(window.dancers[j].$node);
+            }
+          }
+        });
       });
     </script>
 
