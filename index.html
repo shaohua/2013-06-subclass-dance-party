@@ -72,6 +72,13 @@
           $(node).addClass(obj[randomNumber]);
           console.log('adding class "close"');
         };
+
+        var moveCloser = function(clickedNode, otherNode){
+          var current_top = clickedNode.position().top,
+              current_left = clickedNode.position().left;
+          otherNode.css( {top:current_top, left:current_left} );
+        };
+
         $('body').on('click', '.dancer', function (event) {
           window.distances = [];
           for (var i = 0; i < window.dancers.length; i++) {
@@ -81,6 +88,7 @@
           for (var j = 0; j < distances.length; j++) {
             if (distances[j] < 100) {
               changeColor(window.dancers[j].$node, randomNumber);
+              moveCloser($(this), window.dancers[j].$node);
             }
           }
         });
