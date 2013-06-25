@@ -25,7 +25,7 @@ BlueDancer.prototype.constructor = BlueDancer;
 BlueDancer.prototype.step = function(){
   this.oldStep = Dancer.prototype.step;
   this.oldStep();
-  this.$node.toggle();
+  this.$node.toggle(1000).fadeIn(600);
 };
 
 
