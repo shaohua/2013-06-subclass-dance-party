@@ -30,6 +30,24 @@ body, a:link, a:visited, a:active{
   border-radius:10px;
   position:absolute; 
 }
+
+.close2{
+  border:10px solid blue;
+  border-radius:10px;
+  position:absolute; 
+}
+
+.close3{
+  border:10px solid green;
+  border-radius:10px;
+  position:absolute; 
+}
+
+.close4{
+  border:10px solid yellow;
+  border-radius:10px;
+  position:absolute; 
+}
 .white_dancer{
   width: 0px;
   height: 0px;

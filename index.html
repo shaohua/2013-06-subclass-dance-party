@@ -67,8 +67,9 @@
               o_y = otherNode.left;
           return Math.sqrt(Math.pow((o_x - c_x), 2) + Math.pow((o_y - c_y), 2));
         };
-        var changeColor = function(node){
-          $(node).addClass('close');
+        var changeColor = function(node, randomNumber){
+          var obj = {0: 'close', 1: 'close2', 2: 'close3', 3: 'close4'};
+          $(node).addClass(obj[randomNumber]);
           console.log('adding class "close"');
         };
         $('body').on('click', '.dancer', function (event) {
@@ -76,10 +77,10 @@
           for (var i = 0; i < window.dancers.length; i++) {
             distances.push(getDistance($(this), window.dancers[i]));
           }
-
+          var randomNumber = Math.floor(Math.random()*4)
           for (var j = 0; j < distances.length; j++) {
             if (distances[j] < 100) {
-              changeColor(window.dancers[j].$node);
+              changeColor(window.dancers[j].$node, randomNumber);
             }
           }
         });
