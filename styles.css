@@ -28,26 +28,31 @@ body, a:link, a:visited, a:active{
 .close{
   border:10px solid white;
   border-radius:10px;
-  position:absolute; 
+  position:absolute;
+  transition:  all 1s;
 }
 
 .close2{
   border:10px solid blue;
   border-radius:10px;
-  position:absolute; 
+  position:absolute;
+  transition:  all 1s;
 }
 
 .close3{
   border:10px solid green;
   border-radius:10px;
-  position:absolute; 
+  position:absolute;
+  transition:  all 1s;
 }
 
 .close4{
   border:10px solid yellow;
   border-radius:10px;
-  position:absolute; 
+  position:absolute;
+  transition:  all 1s;
 }
+
 .white_dancer{
   width: 0px;
   height: 0px;

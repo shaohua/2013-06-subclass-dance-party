@@ -86,7 +86,7 @@
           }
           var randomNumber = Math.floor(Math.random()*4)
           for (var j = 0; j < distances.length; j++) {
-            if (distances[j] < 100) {
+            if (distances[j] < 200) {
               changeColor(window.dancers[j].$node, randomNumber);
               moveCloser($(this), window.dancers[j].$node);
             }
