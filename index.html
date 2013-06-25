@@ -60,6 +60,30 @@
           }
         });
 
+        var getDistance = function(clickedNode, otherNode){
+          var c_x = clickedNode.position().top,
+              c_y = clickedNode.position().left;
+          var o_x = otherNode.top,
+              o_y = otherNode.left;
+          return Math.sqrt(Math.pow((o_x - c_x), 2) + Math.pow((o_y - c_y), 2));
+        };
+        var changeColor = function(node){
+          $(node).addClass('close');
+          console.log('adding class "close"');
+        };
+        $('body').on('click', '.dancer', function (event) {
+          window.distances = [];
+          for (var i = 0; i < window.dancers.length; i++) {
+            distances.push(getDistance($(this), window.dancers[i]));
+          }
+
+          for (var j = 0; j < distances.length; j++) {
+            if (distances[j] < 100) {
+              changeColor(window.dancers[j].$node);
+            }
+          }
+        });
+
       });
     </script>
 
