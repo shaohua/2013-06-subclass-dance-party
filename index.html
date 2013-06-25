@@ -22,9 +22,12 @@
 
     <script>
       $(document).ready(function(){
+        //add 100 divs so the mouseover event can be triggered
         for(var i = 0; i < 100; i++) {
           $('body').append('<div style="width:100%;height:'+1+'%">');
         }
+
+        //set two global variables to track mouse positions
         $(document).mousemove(function(e){
           window.mouseXPos = e.pageX;
           window.mouseYPos = e.pageY;
@@ -33,27 +36,23 @@
 
         window.dancers = [];
 
+        //create 100 dots
         $('.add100').on('click', function(event){
-          console.log('clicked');
           var dancerMakerFunctionName = $(this).data("dancer-maker-function-name");
 
           // get the maker function for the kind of dancer we're supposed to make
           var dancerMakerFunction = window[dancerMakerFunctionName];
 
-          for(var i = 0; i < 75; i++){
+          for(var i = 0; i < 100; i++){
             // make a dancer with a random position
             var dancer = new dancerMakerFunction(
               $("body").height() * Math.random(),
               $("body").width() * Math.random(),
               Math.random() * 1000
             );
-
             window.dancers.push(dancer);
-            console.log(window.mouseXPos);
-            // console.log('dancer: ', dancer, 'dancer.node: ', dancer.$node);
             $('body').append(dancer.$node);
           }
-
         });
 
         $(".addDancerButton").on("click", function(event){
@@ -70,8 +69,6 @@
           );
 
           window.dancers.push(dancer);
-
-          // console.log('dancer: ', dancer, 'dancer.node: ', dancer.$node);
           $('body').append(dancer.$node);
         });
 
@@ -81,93 +78,73 @@
           }
         });
 
-        // var getDistance = function(clickedNode, otherNode){
-        //   var c_x = clickedNode.position().top,
-        //       c_y = clickedNode.position().left;
-        //   var o_x = otherNode.position().top,
-        //       o_y = otherNode.position().left;
-        //   return Math.sqrt(Math.pow((o_x - c_x), 2) + Math.pow((o_y - c_y), 2));
-        // };
-
+        //four internal functions for the mouseover listener
         var getMouseDistance = function(otherNode){
-          var c_y = mouseXPos,
-              c_x = mouseYPos;
-          var o_x = otherNode.position().top,
-              o_y = otherNode.position().left;
-          return Math.sqrt(Math.pow((o_x - c_x), 2) + Math.pow((o_y - c_y), 2));
+          var otherNodeYPos = otherNode.position().top,
+              otherNodeXPos = otherNode.position().left;
+          var distance =  Math.sqrt(Math.pow((otherNodeYPos - mouseYPos), 2)
+                        + Math.pow((otherNodeXPos - mouseXPos), 2));
+          return distance;
         };
 
         var changeColor = function(node, randomNumber){
-          var obj = {0: 'close', 1: 'close2', 2: 'close3', 3: 'close4'};
+          var obj = {
+            0: 'close',
+            1: 'close2',
+            2: 'close3',
+            3: 'close4'
+          };
           $(node).removeClass();
           $(node).addClass(obj[randomNumber]);
-          console.log('adding class "close"');
         };
-
-        // var moveCloser = function(clickedNode, otherNode){
-        //   var current_top = clickedNode.position().top,
-        //       current_left = clickedNode.position().left;
-        //   otherNode.css( {top:current_top, left:current_left} );
-        // };
 
         var moveToMouse = function(otherNode){
           var current_top = window.mouseYPos,
               current_left = window.mouseXPos;
-          var random = Math.floor(Math.random()*100);
-          var random2 = Math.floor(Math.random()*100);
-          otherNode.css( {top:current_top + random, left:current_left - random2} );
+          var randomTop = Math.floor(Math.random()*100);
+          var randomLeft = Math.floor(Math.random()*100);
+          otherNode.css({
+            top:current_top + randomTop,
+            left:current_left - randomLeft
+          });
           otherNode.position().top = current_top;
           otherNode.position().left = current_left;
         };
+
         var repel = function(otherNode){
-          var random = Math.floor(Math.random()*1000);
-          var random2 = Math.floor(Math.random()*2000);
-          otherNode.css( {top:random, left:random2} );
-          otherNode.position().top = random;
-          otherNode.position().left = random2;
+          var random_top = Math.floor(Math.random()*1000);
+          var random_left = Math.floor(Math.random()*2000);
+          otherNode.css( {top:random_top, left:random_left} );
+          otherNode.position().top = random_top;
+          otherNode.position().left = random_left;
         };
 
-        // $('body').on('click', '.dancer', function (event) {
-        //   window.distances = [];
-        //   console.log(window.distances);
-        //   for (var i = 0; i < window.dancers.length; i++) {
-        //     distances.push(getMouseDistance($(this), window.dancers[i].$node));
-        //   }
-        //   var randomNumber = Math.floor(Math.random()*4)
-        //   for (var j = 0; j < distances.length; j++) {
-        //     if (distances[j] < 1000) {
-        //       changeColor(window.dancers[j].$node, randomNumber);
-        //       moveCloser($(this), window.dancers[j].$node);
-        //     }
-        //   }
-        // });
-
+        //attracts all dots within a given distance to the mouse
         $('body').on('mouseover', function (event) {
-          console.log(window.distances);
-          window.distances = [];
-          for (var i = 0; i < window.dancers.length; i++) {
-            window.distances.push(getMouseDistance(window.dancers[i].$node));
+          distances = []; //GLOBAL variable
+          for (var i = 0; i < dancers.length; i++) {
+            distances.push(getMouseDistance(dancers[i].$node));
           }
           var randomNumber = Math.floor(Math.random()*4)
           for (var j = 0; j < distances.length; j++) {
             if (distances[j] < 1000) {
-              changeColor(window.dancers[j].$node, randomNumber);
-              moveToMouse(window.dancers[j].$node);
+              changeColor(dancers[j].$node, randomNumber);
+              moveToMouse(dancers[j].$node);
             }
           }
         });
 
+        //repels all dots to a random location on the screen
         $('body').on('click', function (event) {
-          console.log(window.distances);
-          window.distances = [];
-          for (var i = 0; i < window.dancers.length; i++) {
-            window.distances.push(getMouseDistance(window.dancers[i].$node));
+          distances = []; //GLOBAL variable
+          for (var i = 0; i < dancers.length; i++) {
+            distances.push(getMouseDistance(dancers[i].$node));
           }
           var randomNumber = Math.floor(Math.random()*4)
           for (var j = 0; j < distances.length; j++) {
             if (distances[j] < 1000) {
-              changeColor(window.dancers[j].$node, randomNumber);
-              repel(window.dancers[j].$node);
+              changeColor(dancers[j].$node, randomNumber);
+              repel(dancers[j].$node);
             }
           }
         });
