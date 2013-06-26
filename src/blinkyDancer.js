@@ -9,5 +9,4 @@ BlinkyDancer.prototype.constructor = BlinkyDancer;
 BlinkyDancer.prototype.step = function(){
   this.oldStep = Dancer.prototype.step;
   this.oldStep();
-  // this.$node.toggle();
 };

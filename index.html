@@ -24,7 +24,7 @@
       $(document).ready(function(){
         //add 100 divs so the mouseover event can be triggered
         for(var i = 0; i < 100; i++) {
-          $('body').append('<div style="width:100%;height:'+1+'%">');
+          $('body').append('<div class="div_container" style="width:100%;height:1%">');
         }
 
         //set two global variables to track mouse positions
@@ -94,8 +94,13 @@
             2: 'close3',
             3: 'close4'
           };
-          $(node).removeClass();
-          $(node).addClass(obj[randomNumber]);
+          if (!$(node).hasClass('white_dancer') &&
+              !$(node).hasClass('blue_dancer') &&
+              !$(node).hasClass('image_dancer')) {
+            $(node).removeClass();
+            $(node).addClass(obj[randomNumber]);
+          }
+
         };
 
         var moveToMouse = function(otherNode){
@@ -103,20 +108,28 @@
               current_left = window.mouseXPos;
           var randomTop = Math.floor(Math.random()*100);
           var randomLeft = Math.floor(Math.random()*100);
-          otherNode.css({
-            top:current_top + randomTop,
-            left:current_left - randomLeft
-          });
-          otherNode.position().top = current_top;
-          otherNode.position().left = current_left;
+          if (!$(otherNode).hasClass('white_dancer') &&
+              !$(otherNode).hasClass('blue_dancer') &&
+              !$(otherNode).hasClass('image_dancer')) {
+            otherNode.css({
+              top:current_top + randomTop,
+              left:current_left - randomLeft
+            });
+            otherNode.position().top = current_top;
+            otherNode.position().left = current_left;
+          }
         };
 
         var repel = function(otherNode){
           var random_top = Math.floor(Math.random()*1000);
           var random_left = Math.floor(Math.random()*2000);
-          otherNode.css( {top:random_top, left:random_left} );
-          otherNode.position().top = random_top;
-          otherNode.position().left = random_left;
+          if (!$(otherNode).hasClass('white_dancer') &&
+              !$(otherNode).hasClass('blue_dancer') &&
+              !$(otherNode).hasClass('image_dancer')) {
+            otherNode.css( {top:random_top, left:random_left} );
+            otherNode.position().top = random_top;
+            otherNode.position().left = random_left;
+          }
         };
 
         //attracts all dots within a given distance to the mouse
@@ -136,15 +149,20 @@
 
         //repels all dots to a random location on the screen
         $('body').on('click', function (event) {
-          distances = []; //GLOBAL variable
-          for (var i = 0; i < dancers.length; i++) {
-            distances.push(getMouseDistance(dancers[i].$node));
-          }
-          var randomNumber = Math.floor(Math.random()*4)
-          for (var j = 0; j < distances.length; j++) {
-            if (distances[j] < 1000) {
-              changeColor(dancers[j].$node, randomNumber);
-              repel(dancers[j].$node);
+          var $target = $(event.target);
+          console.log('target', $target.classList);
+
+          if ($target.hasClass('div_container')){
+            distances = []; //GLOBAL variable
+            for (var i = 0; i < dancers.length; i++) {
+              distances.push(getMouseDistance(dancers[i].$node));
+            }
+            var randomNumber = Math.floor(Math.random()*4)
+            for (var j = 0; j < distances.length; j++) {
+              if (distances[j] < 1000) {
+                changeColor(dancers[j].$node, randomNumber);
+                repel(dancers[j].$node);
+              }
             }
           }
         });

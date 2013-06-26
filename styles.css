@@ -21,33 +21,33 @@ body, a:link, a:visited, a:active{
   background-color: #777;
 }
 .dancer{
-  border:10px solid red;
+  border:9px solid red;
   border-radius:10px;
   position:absolute;
 }
 .close{
-  border:10px solid white;
+  border:9px solid white;
   border-radius:10px;
   position:absolute;
   transition:  all 1s;
 }
 
 .close2{
-  border:10px solid blue;
+  border:9px solid blue;
   border-radius:10px;
   position:absolute;
   transition:  all 1s;
 }
 
 .close3{
-  border:10px solid green;
+  border:9px solid green;
   border-radius:10px;
   position:absolute;
   transition:  all 1s;
 }
 
 .close4{
-  border:10px solid yellow;
+  border:9px solid yellow;
   border-radius:10px;
   position:absolute;
   transition:  all 1s;
