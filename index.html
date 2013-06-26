@@ -133,7 +133,7 @@
         };
 
         var circleRepel = function(otherNode, alpha){
-          var diameter = dancers.length * 3;
+          var diameter = dancers.length * (1/Math.PI) * 9;
           var topPosition = mouseYPos + diameter * Math.cos(alpha);
           var leftPosition = mouseXPos + diameter * Math.sin(alpha);
           console.log(topPosition);
@@ -185,7 +185,7 @@
 
         $('body').on('dblclick', function (event) {
           var $target = $(event.target);
-          
+
           if ($target.hasClass('div_container')){
             distances = []; //GLOBAL variable
             for (var i = 0; i < dancers.length; i++) {
@@ -200,7 +200,7 @@
               }
 
               circleRepel(dancers[j].$node, alpha);
-              alpha+=Math.PI/50;
+              alpha += 2*Math.PI/ distances.length;
 
             }
 
