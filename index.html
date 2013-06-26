@@ -7,6 +7,7 @@
     <script src="src/dancer.js"></script>
     <script src="src/blinkyDancer.js"></script>
     <script src="src/otherDancers.js"></script>
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
   </head>
   <body>
 
@@ -28,13 +29,15 @@
         }
 
         //set two global variables to track mouse positions
-        $(document).mousemove(function(e){
-          window.mouseXPos = e.pageX;
-          window.mouseYPos = e.pageY;
+        $(document).mousemove(function(event){
+          window.mouseXPos = event.pageX;
+          window.mouseYPos = event.pageY;
         });
 
 
         window.dancers = [];
+        window.counter = 0;
+        window.capture_radius = 300;
 
         //create 100 dots
         $('.add100').on('click', function(event){
@@ -115,8 +118,6 @@
               top:current_top + randomTop,
               left:current_left - randomLeft
             });
-            // otherNode.position().top = current_top;
-            // otherNode.position().left = current_left;
           }
         };
 
@@ -127,46 +128,38 @@
               !$(otherNode).hasClass('blue_dancer') &&
               !$(otherNode).hasClass('image_dancer')) {
             otherNode.css( {top:random_top, left:random_left} );
-            // otherNode.position().top = random_top;
-            // otherNode.position().left = random_left;
           }
         };
 
         var circleRepel = function(otherNode, alpha){
-          var diameter = dancers.length * (1/Math.PI) * 9;
+          var diameter = count * (1/Math.PI) * 9;
           var topPosition = mouseYPos + diameter * Math.cos(alpha);
           var leftPosition = mouseXPos + diameter * Math.sin(alpha);
-          console.log(topPosition);
-          console.log(alpha);
-          console.log(leftPosition);
           if (!$(otherNode).hasClass('white_dancer') &&
               !$(otherNode).hasClass('blue_dancer') &&
               !$(otherNode).hasClass('image_dancer')) {
             otherNode.css({top: topPosition, left:leftPosition} );
-            // otherNode.position().top = random_top;
-            // otherNode.position().left = random_left;
           }
         };
-
-        //attracts all dots within a given distance to the mouse
-        $('body').on('mouseover', function (event) {
+        var throttled = _.throttle(function (event) {
           distances = []; //GLOBAL variable
           for (var i = 0; i < dancers.length; i++) {
             distances.push(getMouseDistance(dancers[i].$node));
           }
           var randomNumber = Math.floor(Math.random()*4)
           for (var j = 0; j < distances.length; j++) {
-            if (distances[j] < 1000) {
+            if (distances[j] < capture_radius) {
               changeColor(dancers[j].$node, randomNumber);
               moveToMouse(dancers[j].$node);
             }
           }
-        });
+        }, 200);
+        //attracts all dots within a given distance to the mouse
+        $('body').on('mouseover', throttled);
 
         // repels all dots to a random location on the screen
         $('body').on('click', function (event) {
           var $target = $(event.target);
-          console.log('target', $target.classList);
 
           if ($target.hasClass('div_container')){
             distances = []; //GLOBAL variable
@@ -175,7 +168,7 @@
             }
             var randomNumber = Math.floor(Math.random()*4)
             for (var j = 0; j < distances.length; j++) {
-              if (distances[j] < 1000) {
+              if (distances[j] < capture_radius) {
                 changeColor(dancers[j].$node, randomNumber);
                 repel(dancers[j].$node);
               }
@@ -194,16 +187,19 @@
 
             alpha = 0;
             var randomNumber = Math.floor(Math.random()*4)
+            window.count = 0; //this tracks how many dots are captured
             for (var j = 0; j < distances.length; j++) {
-              if (distances[j] < 1000) {
-                changeColor(dancers[j].$node, randomNumber);
+              if (distances[j] < capture_radius) {
+                count++;
               }
-
-              circleRepel(dancers[j].$node, alpha);
-              alpha += 2*Math.PI/ distances.length;
-
             }
-
+            for (var k = 0; k < distances.length; k++) {
+              if (distances[k] < capture_radius) {
+                changeColor(dancers[k].$node, randomNumber);
+                circleRepel(dancers[k].$node, alpha);
+                alpha += 2*Math.PI/ count;
+              }
+            }
           }
         });
       });
