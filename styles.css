@@ -40,7 +40,7 @@ body, a:link, a:visited, a:active{
 }
 
 .close3{
-  border:9px solid green;
+  border:9px solid red;
   border-radius:10px;
   position:absolute;
   transition:  all 1s;

@@ -7,8 +7,6 @@ WhiteDancer.prototype = Object.create(Dancer.prototype);
 WhiteDancer.prototype.constructor = WhiteDancer;
 
 WhiteDancer.prototype.step = function(){
-  // this.oldStep = Dancer.prototype.step;
-  // this.oldStep();
   Dancer.prototype.step.call(this);
   this.$node.toggle();
 };
@@ -22,8 +20,7 @@ BlueDancer.prototype = Object.create(Dancer.prototype);
 BlueDancer.prototype.constructor = BlueDancer;
 
 BlueDancer.prototype.step = function(){
-  this.oldStep = Dancer.prototype.step;
-  this.oldStep();
+  Dancer.prototype.step.call(this);
   this.$node.toggle(1000).fadeIn(600);
 };
 
@@ -40,7 +37,6 @@ ImageDancer.prototype = Object.create(Dancer.prototype);
 ImageDancer.prototype.constructor = ImageDancer;
 
 ImageDancer.prototype.step = function(){
-  this.oldStep = Dancer.prototype.step;
-  this.oldStep();
+  Dancer.prototype.step.call(this);
   this.$node.toggle();
 };
