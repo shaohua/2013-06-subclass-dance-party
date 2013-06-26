@@ -115,8 +115,8 @@
               top:current_top + randomTop,
               left:current_left - randomLeft
             });
-            otherNode.position().top = current_top;
-            otherNode.position().left = current_left;
+            // otherNode.position().top = current_top;
+            // otherNode.position().left = current_left;
           }
         };
 
@@ -127,8 +127,24 @@
               !$(otherNode).hasClass('blue_dancer') &&
               !$(otherNode).hasClass('image_dancer')) {
             otherNode.css( {top:random_top, left:random_left} );
-            otherNode.position().top = random_top;
-            otherNode.position().left = random_left;
+            // otherNode.position().top = random_top;
+            // otherNode.position().left = random_left;
+          }
+        };
+
+        var circleRepel = function(otherNode, alpha){
+          var diameter = dancers.length * 3;
+          var topPosition = mouseYPos + diameter * Math.cos(alpha);
+          var leftPosition = mouseXPos + diameter * Math.sin(alpha);
+          console.log(topPosition);
+          console.log(alpha);
+          console.log(leftPosition);
+          if (!$(otherNode).hasClass('white_dancer') &&
+              !$(otherNode).hasClass('blue_dancer') &&
+              !$(otherNode).hasClass('image_dancer')) {
+            otherNode.css({top: topPosition, left:leftPosition} );
+            // otherNode.position().top = random_top;
+            // otherNode.position().left = random_left;
           }
         };
 
@@ -147,7 +163,7 @@
           }
         });
 
-        //repels all dots to a random location on the screen
+        // repels all dots to a random location on the screen
         $('body').on('click', function (event) {
           var $target = $(event.target);
           console.log('target', $target.classList);
@@ -164,6 +180,30 @@
                 repel(dancers[j].$node);
               }
             }
+          }
+        });
+
+        $('body').on('dblclick', function (event) {
+          var $target = $(event.target);
+          
+          if ($target.hasClass('div_container')){
+            distances = []; //GLOBAL variable
+            for (var i = 0; i < dancers.length; i++) {
+              distances.push(getMouseDistance(dancers[i].$node));
+            }
+
+            alpha = 0;
+            var randomNumber = Math.floor(Math.random()*4)
+            for (var j = 0; j < distances.length; j++) {
+              if (distances[j] < 1000) {
+                changeColor(dancers[j].$node, randomNumber);
+              }
+
+              circleRepel(dancers[j].$node, alpha);
+              alpha+=Math.PI/50;
+
+            }
+
           }
         });
       });
